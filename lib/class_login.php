@@ -67,6 +67,25 @@ class login extends db_connect {
     }
 
     /**
+     * Function to get the username using the session hash
+     * (warning! use this only for display purposes, not to authenticate someone!)
+     * @param string $hash
+     * @return string $username
+     */
+    public function get_user_by_hash ($hash) {
+        $q = "SELECT username FROM users WHERE session_hash = ?";
+        $st = $this->c->prepare ($q) or die ($this->c->error);
+        $st->bind_param ('s', $hash);
+        $st->execute () or die ($st->error);
+        $st->bind_result ($username);
+        if (!$st->fetch ()) {
+            /* Hash is not in the table */
+            return false;
+        }
+        return $username;
+    }
+
+    /**
      * Function to set the session hash
      * to $hash
      * @param int $uid

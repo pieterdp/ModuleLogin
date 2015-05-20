@@ -25,6 +25,7 @@ class login_module {
     public $msg; /* Message describing what the function did */
     public $loc; /* Contains, for successful actions, the URL the user came from/must go to */
     public $html; /* Contains, for failed actions, a HTML form */
+    public $username;
 
     function __construct () {
         $this->p = new page_generator ();
@@ -56,6 +57,7 @@ class login_module {
             //header ("location: $loc", 302);
             $this->loc = $loc;
             $this->msg = "ALREADY_LOGGED_IN";
+            $this->username = $this->l->get_user_by_hash ($_SESSION['login']);
             return true;
         }
 
@@ -73,6 +75,7 @@ class login_module {
                 /* Correctly logged in */
                 $this->loc = $loc;
                 $this->msg = "LOGGED_IN";
+                $this->username = $this->l->get_user_by_hash ($_SESSION['login']);
                 return true;
             }
             /* Something was wrong */
